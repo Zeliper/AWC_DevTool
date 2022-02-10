@@ -93,9 +93,9 @@ unsafeWindow.on = true;
     //#################################################################################################
     unsafeWindow.getObj = (uids) => {
         if (Array.isArray(uids)){
-            return unsafeWindow.AwcObjectUtil.getObjects(uids);
+            return unsafeWindow.clientDataModel.getObjects(uids);
         }else{
-            return unsafeWindow.AwcObjectUtil.getObject(uids);
+            return unsafeWindow.clientDataModel.getObject(uids);
         }
     }
     unsafeWindow.getProps = async (uids,props) => {
@@ -114,11 +114,14 @@ unsafeWindow.on = true;
                 Objs.push(uids);
             }
         }
-        if (Array.isArray(props)){
-            return await unsafeWindow.AwcObjectUtil.getProperties(Objs,props);
-        }else{
-            return await unsafeWindow.AwcObjectUtil.getProperties(Objs,[props]);
+        if (!Array.isArray(props)){
+            props = [props];
         }
+        let soaInputParam = {
+          objects: Objs,
+          attributes: props
+        }
+	return soaService.post( 'Core-2006-03-DataManagement', 'getProperties', soaInputParam );
     }
     unsafeWindow.getData = (elements) =>{
         if(Array.isArray(elements)){
