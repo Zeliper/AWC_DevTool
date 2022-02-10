@@ -3,7 +3,7 @@
 // @namespace    https://github.com/Zeliper/AWC_DevTool
 // @updateURL    https://github.com/Zeliper/AWC_DevTool/raw/main/AWC_DevTool.js
 // @downloadURL  https://github.com/Zeliper/AWC_DevTool/raw/main/AWC_DevTool.js
-// @version      1.1
+// @version      1.2
 // @description  Based On AWC 6.0 & TC13.3
 // @author       Oh Seung Woo
 // @match        localhost
@@ -16,7 +16,11 @@
 // ==/UserScript==
 /*
 * === Change Log ===
-* 
+*
+* 2022.02.10 : 1.1 -> 1.2 마무리 작업
+*     Single Query 추가
+*     Load 완료 메세지 정리 및 도움말 함수 추가
+*
 * 2022.02.10 : 0.1 -> 1.1 정식 버전 업데이트
 *     AwcObjectUtil 종속성 제거 (OOTB 모듈 사용으로 교체)
 *     Build시 bundle화 된 소스코드 로드 가능하게 로직 변경
@@ -96,7 +100,7 @@ unsafeWindow.on = true;
         return msg;
     }
     //#################################################################################################
-    //Import í  ëª¨ëë¤ì¶ê°. ìëë¡ ì¬ì©í  í¨ì êµ¬ì± 에잉 주석이 이게 
+    // Automation 함수
     //#################################################################################################
     unsafeWindow.getObj = (uids) => {
         if (Array.isArray(uids)){
@@ -159,15 +163,27 @@ unsafeWindow.on = true;
         let scope = unsafeWindow.angular.element(dataElement);
         return unsafeWindow.conditionService.evaluateCondition(declViewModel,expression);
     }
+    unsafeWindow.q = (query) => {
+        return unsafeWindow.document.querySelector(query);
+    }
 
     //#################################################################################################
-    //  Prototype game~ Prototype.
+    //  설명서 추가
     //#################################################################################################
-    //#################################################################################################
-    //  í¨ì ì¤ëª ë¬ë¤!
-    //#################################################################################################
+    let loadSuccess = () => {
+      let msg = "\n###############################[ DevTool Loaded! ]###############################\n";
+      msg    += fort("");
+      msg    += fort("Total Loaded Module : ",LoadedModuleName.length, "  =>  'getLoadedModules' for Detail");
+      msg    += fort("");
+      msg    += fort("Total Failed Module : ",FailedModuleName.length, "  =>  'getFailedModules' for Detail");
+      msg    += fort("");
+      msg    += fort("Type 'devtoolHelp()' for more Information");
+      msg    += fort("");
+      msg    += "#################################################################################";
+      console.log(msg);
+    }
     unsafeWindow.helpCondition = () => {
-        let msg = "\n############################[ Check Condition Help ]############################\n";
+        let msg = "\n#############################[ Check Condition Help ]############################\n";
         msg    += fort("");
         msg    += fort("  =>  example 1 using CTX : ");
         msg    += fort("        checkCondition('ctx.selected != null');");
@@ -176,42 +192,41 @@ unsafeWindow.on = true;
         msg    += fort("        checkCondition('data.object_name != null',DOCELEMENT);");
         msg    += fort("");
         msg    += fort("  =>  example 2 using Json : ");
-        msg    += fort("        checkCondition(");
-        msg    += fort("          {");
-        msg    += fort("            \"$source\": \"ctx.mselected\",");
-        msg    += fort("            \"$query\": {");
-        msg    += fort("              \"$all\": {");
-        msg    += fort("                \"$source\": \"modelType.typeHierarchyArray\",");
-        msg    += fort("                \"$query\": {");
-        msg    += fort("                  \"$in\": [");
-        msg    += fort("                    \"Wbs0ElementCondElement\"");
-        msg    += fort("                  ]");
-        msg    += fort("                }");
+        msg    += fort("        checkCondition({");
+        msg    += fort("          \"$source\": \"ctx.mselected\",");
+        msg    += fort("          \"$query\": {");
+        msg    += fort("            \"$all\": {");
+        msg    += fort("              \"$source\": \"modelType.typeHierarchyArray\",");
+        msg    += fort("              \"$query\": {");
+        msg    += fort("                \"$in\": [");
+        msg    += fort("                  \"Wbs0ElementCondElement\"");
+        msg    += fort("                ]");
         msg    += fort("              }");
         msg    += fort("            }");
         msg    += fort("          }");
         msg    += fort("        }");
+        msg    += fort("      );");
+        msg    += fort("");
         msg    += "#################################################################################";
         console.log(msg);
     }
-
-    let msg = "\n###############################[ DevTool Loaded! ]###############################\n";
-    msg    += fort("");
-    msg    += fort("Total Loaded Module : ",LoadedModuleName.length, "  =>  'getLoadedModules' for Detail");
-    msg    += fort("");
-    msg    += fort("Total Failed Module : ",FailedModuleName.length, "  =>  'getFailedModules' for Detail");
-    msg    += fort("");
-    msg    += fort("If want to add module that you want to use in dev console");
-    msg    += fort("pls add deps on kit.json");
-    msg    += fort("");
-    msg    += "###########################[ Custom Function Loaded! ]###########################\n";
-    msg    += fort("");
-    msg    += fort("getObj(uids)          =>  Get objects from uid or array of uid");
-    msg    += fort("getProps(uids,props)  =>  Load propertie(s) from uid,prop string");
-    msg    += fort("getData(elements)     =>  Get data(viewModel) from element(s)");
-    msg    += fort("getDoc(query)         =>  Get element(s) from document query");
-    msg    += fort("checkCondition(expression,dataElement = null) => Check helpCondition()")
-    msg    += fort("");
-    msg    += "#################################################################################";
-    console.log(msg);
+    unsafeWindow.devtoolHelp = () => {
+      let msg = "\n################################[ DevTool Help ]#################################\n";
+      msg    += fort("");
+      msg    += fort("If want to add module that you want to use in dev console");
+      msg    += fort("pls add deps on kit.json");
+      msg    += fort("");
+      msg    += "#################################################################################\n";
+      msg    += fort("");
+      msg    += fort("getObj(uids)          =>  Get objects from uid or array of uid");
+      msg    += fort("getProps(uids,props)  =>  Load propertie(s) from uid,prop string");
+      msg    += fort("getData(elements)     =>  Get data(viewModel) from element(s)");
+      msg    += fort("getDoc(query)         =>  Get element(s) from document query");
+      msg    += fort("q(query)              =>  Single select document query");
+      msg    += fort("checkCondition(expression,dataElement = null) => Check helpCondition()")
+      msg    += fort("");
+      msg    += "#################################################################################";
+      console.log(msg);
+    }
+    loadSuccess();
 })();
