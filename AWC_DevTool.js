@@ -35,10 +35,10 @@ unsafeWindow.on = true;
                     unsafeWindow[_module.name] = unsafeWindow.afxWeakImport(_module.deps);
                     LoadedModuleName.push(_module.name);
                 }else{
-                    FailedModuleName.push(_module.name);
+                    FailedModuleName.push(_module.deps);
                 }
             }catch(e){
-                FailedModuleName.push(_module.name);
+                FailedModuleName.push(_module.deps);
             }
         }
         AdditionalFunction();
