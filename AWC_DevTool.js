@@ -3,7 +3,7 @@
 // @namespace    https://github.com/Zeliper/AWC_DevTool
 // @updateURL    https://github.com/Zeliper/AWC_DevTool/raw/main/AWC_DevTool.js
 // @downloadURL  https://github.com/Zeliper/AWC_DevTool/raw/main/AWC_DevTool.js
-// @version      1.0
+// @version      1.1
 // @description  Based On AWC 6.0 & TC13.3
 // @author       Oh Seung Woo
 // @match        localhost
@@ -14,6 +14,13 @@
 // @grant        unsafeWindow
 // @run-at       document-end
 // ==/UserScript==
+/*
+* === Change Log ===
+* 
+* 2022.02.10 : 0.1 -> 1.1 정식 버전 업데이트
+*     AwcObjectUtil 종속성 제거 (OOTB 모듈 사용으로 교체)
+*     Build시 bundle화 된 소스코드 로드 가능하게 로직 변경
+*/
 unsafeWindow.on = true;
 (async function() {
     'use strict';
