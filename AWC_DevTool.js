@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AWC Devtool
 // @namespace    https://github.com/Zeliper/AWC_DevTool
-// @version      0.1
+// @version      1.0
 // @description  Based On AWC 6.0 & TC13.3
 // @author       Oh Seung Woo
 // @match        localhost
