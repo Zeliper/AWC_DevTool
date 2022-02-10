@@ -15,8 +15,6 @@
 // @run-at       document-end
 // ==/UserScript==
 /*
-* === Change Log ===
-*
 * 2022.02.10 : 1.1 -> 1.2 마무리 작업
 *     Single Query 추가
 *     Load 완료 메세지 정리 및 도움말 함수 추가
