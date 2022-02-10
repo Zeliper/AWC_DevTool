@@ -175,7 +175,7 @@ unsafeWindow.on = true;
       msg    += fort("");
       msg    += fort("Total Failed Module : ",FailedModuleName.length, "  =>  'getFailedModules' for Detail");
       msg    += fort("");
-      msg    += fort("Type 'devtoolHelp()' for more Information");
+      msg    += fort("Type 'devHelp()' for more Information");
       msg    += fort("");
       msg    += "#################################################################################";
       console.log(msg);
@@ -208,7 +208,7 @@ unsafeWindow.on = true;
         msg    += "#################################################################################";
         console.log(msg);
     }
-    unsafeWindow.devtoolHelp = () => {
+    unsafeWindow.devHelp = () => {
       let msg = "\n################################[ DevTool Help ]#################################\n";
       msg    += fort("");
       msg    += fort("If want to add module that you want to use in dev console");
