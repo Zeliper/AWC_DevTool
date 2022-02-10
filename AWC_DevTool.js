@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name         AWC Devtool
 // @namespace    https://github.com/Zeliper/AWC_DevTool
+// @updateURL    https://raw.githubusercontent.com/Zeliper/AWC_DevTool/main/AWC_DevTool.js
+// @downloadURL  https://raw.githubusercontent.com/Zeliper/AWC_DevTool/main/AWC_DevTool.js
 // @version      0.1
 // @description  Based On AWC 6.0 & TC13.3
 // @author       Oh Seung Woo
