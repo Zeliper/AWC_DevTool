@@ -68,35 +68,178 @@
 </details><details><summary>configuration,</summary>
 
 > 타입 : `Object <ConfigurationDef>`<br />설명 : module 확장시 별도 설정 사항
-- <details><summary>ConfigurationDef 설명,</summary>
-
-  > 타입 : `Object <ConfigurationDef>`<br />설명 : module 확장시 별도 설정 사항<br />
-> ```json
-{
-
-}
-```
-</details>
 
 ```json
-{
-
+"configuration": {
+    "actionTemplateDefs": {
+        "output": "json",
+        "definition": "module"
+    },
+    "adapters": {
+        "output": "javascript",
+        "format": "array",
+        "definition": "module"
+    },
+    "aliasRegistry": {
+        "output": "json",
+        "definition": "module"
+    }
 }
 ```
-</details><details><summary>,</summary>
+    
+- <details><summary>ConfigurationDef 설명,</summary>
+    
+  > 타입 : `Object`<br />설명 : configuration에서 사용될 Object형식<br />
+    
+    ```json
+    "key" : {
+        "output" : "json | javascript",
+        "format" : "array | object",
+        "definition" : "module | kit",
+        "multiple" : Boolean,
+        "uniqueDepth" : Integer
+    }
+    ```
 
-> 타입 : `String`<br />설명 : 
-</details><details><summary>,</summary>
+</details></details><details><summary>solutionDef,</summary>
 
-> 타입 : `String`<br />설명 : 
-</details><details><summary>,</summary>
+> 타입 : `Object`<br />설명 : 솔루션 정의<br />
+```json
+"solutionDef": {
+        "solutionId": "test-solution",
+        "solutionName": "test-solution",
+        "solutionVersion": "",
+        "browserTitle": "",
+        "brandName": "",
+        "companyName": "Siemens PLM Software",
+        "copyrightText": "Copyright © 2019 Siemens Product Lifecycle Management Software Inc.",
+        "workspaces": [],
+        "authenticator": "",
+        "defaultWorkspace": ""
+}
+```
+    
+> 키,값 설명
+    
+`solutionID : String`<br />
+    > 솔루션 고유 명칭
+    
+`brandName : String`<br />
+    > 솔루션 소유 회사 명
+    
+`solutionName : String`<br />
+    > 솔루션 이름
+    
+`solutionVersion : String`<br />
+    > 솔루션 버전
+    
+`copyrightText : String`<br />
+    > 저작권 표기
+    
+`companyName : String`<br />
+    > 상호
+    
+`solutionWar : String`<br />
+    > war 파일 명
+    
+`workspaces : String`<br />
+    > 솔루션 내 정의된 Workspace 이름
+    
+`defaultWorkspace : String`<br />
+    > 솔루션 기본 Workspace [war 내부에 Workspace가 정의되어 있어야함]
+    
+`clipboard : String`<br />
+    > 솔루션 클립보드 서비스 파일
+    
+`authenticator : String`<br />
+    > 솔루션 유저 인증 서비스
+    
+`analytics : String`<br />
+    > Backend 분석 서비스 (로깅)
+    
+`defaultTheme : "ui-lightTheme | ui-darkTheme"`<br />
+    > 솔루션 기본 테마
+    
+`commandVisibility : String`<br />
+    > 커맨드 Visibility 처리 서비스 이름
+    
+`bundler : String`<br />
+    > 번들러 설정<br />
+    
+    
+    "bundler": {
+      "entryFiles": [
+        "tc.html"
+      ]
+    }
+    
+`required : String[]`<br />
+    > Dependency 목록
+    
+    "required": [
+        "solutionId",
+        "brandName",
+        "solutionName",
+        "solutionVersion",
+        "browserTitle",
+        "companyName",
+        "copyrightText"
+    ]
+    
+</details><details><summary>bundles,</summary>
 
-> 타입 : `String`<br />설명 : 
-</details><details><summary>,</summary>
+> 타입 : `Object`<br />설명 : 번들화 시에 일부만 로드하고싶은경우 (required 포함) 리스트 <br />
+    
+- <details><summary>Object 키 목록</summary>
+    
+    ``` json
+    "번들명" : { 
+        "include" : "String[]",
+        "deps" : "String[]",
+        "exclude" : "String[]",
+        "optimize" : "String[]",
+        "allowSourceOverwrites" : "Boolean",
+        "preserveLicenseComments" : "Boolean",
+        "generateSourceMaps" : "Boolean"
+    }
+    ```
+    
+```json
+"bundles" : {
+    "js/hostintegration.bundle.js": {
+      "deps": [
+        "js/bootstrap"
+      ],
+      "include": [
+        "js/adobeHostingService",
+        "js/hosting/inf/services/hostClientInfo_2019_05",
+        "js/hosting/inf/services/hostSelection_2019_05",
+        "js/hosting/inf/services/hostTheme_2019_05",
+        "js/hosting/sol/services/hostQuery_2019_05",
+        "js/hostMentorQueryService",
+        "js/hostVisQueryService",
+        "js/hostShapeSearchQueryService",
+        "js/hostedNxUtils"
+      ]
+    },
+    "": {
+      "optimize": "uglify2",
+      "allowSourceOverwrites": false,
+      "preserveLicenseComments": false,
+      "generateSourceMaps": true
+    },
+    "lib/noty/jquery.noty.js": {
+      "name": "lib/noty/jquery.noty"
+    }
+}
+```
+    
+</details>
+</details><details><summary>ignoreMissingKits,</summary>
 
-> 타입 : `String`<br />설명 : 
-</details><details><summary>,</summary>
+> 타입 : `Boolean`<br />설명 : 빌드시 누락 Kit 무시 설정
+</details><details><summary>OOTB,</summary>
 
-> 타입 : `String`<br />설명 : 
+> 타입 : `Boolean`<br />설명 : OOTB 플래그
 </details>
 }
