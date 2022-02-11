@@ -1,245 +1,180 @@
-# kit.json
+# CommandsViewModel.json
 
-모듈 또는 공통 solution에 있는 kit.json의 내부 스키마 분석 및 작성 방법에 대해서 기술합니다.
+CommandsViewModel.json의 스키마 정의 입니다.
 
-`kit.json`
+예제는 최하단에 있습니다.
 
+<blockquote>
+CommandsViewModel.json
 {
-<details><summary>name,</summary>
 
-> 타입 : `String`<br />설명 : 킷,모듈의 명칭
+<details><summary>commands : </summary><blockquote>
+    
+타입 : `Object <commandDef>`<br />설명 : Command의 정의 <br />필수 키 : 없음<br />
+    
+<details><summary>commandDef 정의</summary><blockquote>
+
+"iconId" : `String` -> SVG 아이콘 ID [src/image] <br />
+"isGroup" : `T<conditionOrBoolDef>`-> 그룹 여부 <br /> 
+"title" : `String or Object` -> Command 표시 텍스트 (Object형식은 다음 파일참조 declarativeCommandsViewModelSchema-1.0.0.json)<br />
+"description" : `String or Objec` -> Command 설명 텍스트 Object형식은 title설명 참조 <br />
+"template" : `String` -> Command 템플릿 이름 <br />
+"isShuttle" : `Boolean` -> Command 제공형식 Shuttle 여부 (OOTB 예제 없음) <br />
+"isRibbon" : `Boolean` -> Command 제공형식 Ribbon 여부 (Group과 유사) <br />
+"isToggle" : `Boolean` -> Toggle Command 여부 <br />
+"extendedTooltip" : `Object` -> 확장 Tooltip 텍스트 <br /> 예시 <br />
+
+```json
+"extendedTooltip": {
+    "view": "extendedTooltipDefault"
+}
+```
+
+"selected" : `Object` -> 아직 미확인 (selected 상태일때 속성값 바뀌는걸로 추정) {<br />
+&ensp;&ensp;"iconId" : "String" -> 상단의 iconId와 동일<br />
+&ensp;&ensp;"title" : "String or Object" -> 상단의 title과 동일<br />
+&ensp;&ensp;"description" : "String or Object" -> 상단의 description 과 동일 <br />
+&ensp;&ensp;"extendedTooltip" : "Object" -> 상단의 extendedTooltip와 동일<br />
+}<br />예제 <br />
+    
+```json
+"selected": {
+    "iconId": "cmdFreezeExchange",
+    "title": "{{i18n.fixedLayout}}"
+}
+```
+    
+conditionOrBoolDef는 다음 두가지 케이스를 지원함<br />
+```json
+"isGroup" : false,
+"selected" : { 
+    "condition": "conditions.isCreateCommandValid"
+}
+```
+
 </details>
-<details><summary>author,</summary>
 
-> 타입 : `String`<br />설명 : 소유자
-</details><details><summary>srcDir,</summary>
-
-> 타입 : `String`<br />설명 : 소스 디렉터리 Default값은 `src_kit`
-</details><details><summary>srcModule,</summary>
-
-> 타입 : `String`<br />설명 : Source .War파일 Default값은 `fx-appbase`
-</details><details><summary>zipFile,</summary>
-
-> 타입 : `String`<br />설명 : Staging 폴더 zip파일 경로
-</details><details><summary>level,</summary>
-
-> 타입 : `Integer`<br />설명 : kit 계층 레벨 0에 가까울수록 Base (OOTB등)
-</details><details><summary>skipSonar,</summary>
-
-> 타입 : `Boolean`<br />설명 : kit의 Sonar generation 무시 플레그 Default값은 `true`
-</details><details><summary>enableWhenToVisibleWhen,</summary>
-
-> 타입 : `Boolean`<br />설명 : 스키마 설명이 없음
-</details><details><summary>kitDeps,</summary>
-
-> 타입 : `String[]`<br />설명 : kit 종속성 목록 <br />
+예시
+    
 ```json
-"kitDeps": [
-    "change",
-    "capa",
-    "tc-aw-solution"
-]
+"commands": {
+        "Aw2dPageUp": {
+            "iconId": "miscChevronRight",
+            "title": "{{i18n.pageUp}}",
+            "description": "{{i18n.Aw2dPageUpDesc}}",
+            "isToggle": false
+        },
+        "Aw2dPageDown": {
+            "iconId": "miscChevronLeft",
+            "title": "{{i18n.pageDown}}",
+            "description": "{{i18n.Aw2dPageDownDesc}}",
+            "isToggle": false
+        },
+        "Aw2dPage": {
+            "iconId": "cmdBlankIcon",
+            "title": "{{i18n.currentPage}}",
+            "template": "<div class='aw-2dviewerjs-pagenumber'>{{ctx.awTwoDViewer.currentPage}}</div>",
+            "description": "{{i18n.Aw2dPageDesc}}",
+            "isToggle": false
+        }
+}
 ```
-</details><details><summary>kitMap,</summary>
+        
+</details>
+    
+<details><summary>commandHandlers : </summary><blockquote>
+    
+타입 : `Object <commandHandlersDef>`<br />설명 : CommandHandler 정의 하나의 Command에 여러개의 CommandHanlder를 부착할 수 있음 <br />필수 키 : `id`,`activeWhen`<br />
+    
+<details><summary>commandHandlersDef 정의</summary><blockquote>
+    
+"id" : `String` -> Handler가 제어할 Command ID <br />
+"action" : `String`-> Handler의 Action  <br /> 
+"activeWhen" : `T<conditionOrBoolDef>` -> Handler 동작 조건 <br />
+"visibleWhen" : `T<conditionOrBoolDef>` -> Handler의 표시 조건 <br />
+"selectWhen" : `T<conditionOrBoolDef>` -> Handler의 선택 조건 <br />
+"enableWhen" : `T<conditionOrBoolDef>` -> Handler의 사용가능상태 조건 <br />
+"openWhen" : `T<conditionOrBoolDef>` -> Group Handler의 경우 동작 조건<br />
 
-> 타입 : `Object`<br />설명 : 지원되지않음 (Deprecated)
-</details><details><summary>soaDeps,</summary>
-
-> 타입 : `String[]`<br />키 사용시 최소 배열 개수 : `1`<br />설명 : 해당 kit에서 사용할 Soa Dependency 목록 <br /> 만약 Soa API목록에서 찾아서 Soa를 Post했을때 404에러가 날 경우 여기에 추가 후 사용<br />
+conditionOrBoolDef는 다음 두가지 케이스를 지원함<br />
 ```json
-"soaDeps": [
-  "Teamcenter.Soa.Administration.PreferenceManagement",
-  "Teamcenter.Soa.BusinessModeler",
-  "Teamcenter.Soa.AuthorizedDataAccess",
-  "Teamcenter.Soa.Administration",
-  "Awp0.Soa.AWS2",
-  "Aut0.Soa.Security"
-]
-```
-</details><details><summary>extraDeps,</summary>
-
-> 타입 : `String[]`<br />키 사용시 최소 배열 개수 : `1`<br />설명 : webpack 빌드시에 강제로 Include할 kit Dependency 목록입니다.
-</details><details><summary>karmaKitDeps,</summary>
-
-> 타입 : `String[]`<br />키 사용시 최소 배열 개수 : `1`<br />설명 : kit 구동 테스트시에 필요한 kit 목록
-</details><details><summary>modules,</summary>
-
-> 타입 : `String`<br />키 사용시 최소 배열 개수 : `0`<br />설명 : kit 빌드시 포함할 module 목록
-</details><details><summary>configuration,</summary>
-
-> 타입 : `Object <ConfigurationDef>`<br />설명 : module 확장시 별도 설정 사항
-
-```json
-"configuration": {
-    "actionTemplateDefs": {
-        "output": "json",
-        "definition": "module"
-    },
-    "adapters": {
-        "output": "javascript",
-        "format": "array",
-        "definition": "module"
-    },
-    "aliasRegistry": {
-        "output": "json",
-        "definition": "module"
-    }
+"enableWhen" : false,
+"visibleWhen" : { 
+    "condition": "conditions.isCreateCommandValid"
 }
 ```
     
-- <details><summary>ConfigurationDef 설명,</summary>
-    
-  > 타입 : `Object`<br />설명 : configuration에서 사용될 Object형식<br />
-    
-    ```json
-    "key" : {
-        "output" : "json | javascript",
-        "format" : "array | object",
-        "definition" : "module | kit",
-        "multiple" : Boolean,
-        "uniqueDepth" : Integer
-    }
-    ```
+</details>
 
-</details></details><details><summary>solutionDef,</summary>
+예제
 
-> 타입 : `Object`<br />설명 : 솔루션 정의<br />
 ```json
-"solutionDef": {
-        "solutionId": "test-solution",
-        "solutionName": "test-solution",
-        "solutionVersion": "",
-        "browserTitle": "",
-        "brandName": "",
-        "companyName": "Siemens PLM Software",
-        "copyrightText": "Copyright © 2019 Siemens Product Lifecycle Management Software Inc.",
-        "workspaces": [],
-        "authenticator": "",
-        "defaultWorkspace": ""
-}
-```
-    
-> 키,값 설명
-    
-`solutionID : String`<br />
-    > 솔루션 고유 명칭
-    
-`brandName : String`<br />
-    > 솔루션 소유 회사 명
-    
-`solutionName : String`<br />
-    > 솔루션 이름
-    
-`solutionVersion : String`<br />
-    > 솔루션 버전
-    
-`copyrightText : String`<br />
-    > 저작권 표기
-    
-`companyName : String`<br />
-    > 상호
-    
-`solutionWar : String`<br />
-    > war 파일 명
-    
-`workspaces : String`<br />
-    > 솔루션 내 정의된 Workspace 이름
-    
-`defaultWorkspace : String`<br />
-    > 솔루션 기본 Workspace [war 내부에 Workspace가 정의되어 있어야함]
-    
-`clipboard : String`<br />
-    > 솔루션 클립보드 서비스 파일
-    
-`authenticator : String`<br />
-    > 솔루션 유저 인증 서비스
-    
-`analytics : String`<br />
-    > Backend 분석 서비스 (로깅)
-    
-`defaultTheme : "ui-lightTheme | ui-darkTheme"`<br />
-    > 솔루션 기본 테마
-    
-`commandVisibility : String`<br />
-    > 커맨드 Visibility 처리 서비스 이름
-    
-`bundler : String`<br />
-    > 번들러 설정<br />
-    
-    
-    "bundler": {
-      "entryFiles": [
-        "tc.html"
-      ]
-    }
-    
-`required : String[]`<br />
-    > Dependency 목록
-    
-    "required": [
-        "solutionId",
-        "brandName",
-        "solutionName",
-        "solutionVersion",
-        "browserTitle",
-        "companyName",
-        "copyrightText"
-    ]
-    
-</details><details><summary>bundles,</summary>
-
-> 타입 : `Object`<br />설명 : 번들화 시에 일부만 로드하고싶은경우 (required 포함) 리스트 <br />
-    
-- <details><summary>Object 키 목록</summary>
-    
-    ``` json
-    "번들명" : { 
-        "include" : "String[]",
-        "deps" : "String[]",
-        "exclude" : "String[]",
-        "optimize" : "String[]",
-        "allowSourceOverwrites" : "Boolean",
-        "preserveLicenseComments" : "Boolean",
-        "generateSourceMaps" : "Boolean"
-    }
-    ```
-    
-```json
-"bundles" : {
-    "js/hostintegration.bundle.js": {
-      "deps": [
-        "js/bootstrap"
-      ],
-      "include": [
-        "js/adobeHostingService",
-        "js/hosting/inf/services/hostClientInfo_2019_05",
-        "js/hosting/inf/services/hostSelection_2019_05",
-        "js/hosting/inf/services/hostTheme_2019_05",
-        "js/hosting/sol/services/hostQuery_2019_05",
-        "js/hostMentorQueryService",
-        "js/hostVisQueryService",
-        "js/hostShapeSearchQueryService",
-        "js/hostedNxUtils"
-      ]
+"commandHandlers": {
+    "createCommandHandler": {
+        "id": "Awp0CreateCommand",
+        "action": "createZCC",
+        "activeWhen": {
+            "condition": "conditions.isCreateCommandValid"
+        },
+        "visibleWhen": {
+            "condition": "conditions.isCreateCommandValid"
+        },
+        "enableWhen": {
+            "condition": "conditions.isCreateCommandValid"
+        }
     },
-    "": {
-      "optimize": "uglify2",
-      "allowSourceOverwrites": false,
-      "preserveLicenseComments": false,
-      "generateSourceMaps": true
-    },
-    "lib/noty/jquery.noty.js": {
-      "name": "lib/noty/jquery.noty"
+    "saveAsCommandHandler": {
+        "id": "Awp0SaveAsCommand",
+        "action": "saveasZCC",
+        "activeWhen": {
+            "condition": "conditions.isSaveAsCommandValid"
+        },
+        "visibleWhen": {
+            "condition": "conditions.isSaveAsCommandValid"
+        },
+        "enableWhen": true
     }
 }
 ```
     
 </details>
-</details><details><summary>ignoreMissingKits,</summary>
+    
+<details><summary>commandPlacements : </summary><blockquote>
 
-> 타입 : `Boolean`<br />설명 : 빌드시 누락 Kit 무시 설정
-</details><details><summary>OOTB,</summary>
+타입 : `Object <commandPlacementsDef>`<br />설명 : Command의 위치 정의 <br />필수 키 : `id`<br />
 
-> 타입 : `Boolean`<br />설명 : OOTB 플래그
+<details><summary>commandPlacementsDef 정의</summary><blockquote>
+    
+"id" : `String` -> 위치 정의될 Command ID <br />
+"parentGroupId" : `String`-> Command를 붙힐 Group Command ID  <br /> 
+"uiAnchor" : `String` -> Command를 붙힐 UIAnchor ID <br />
+"priority" : `Integer` -> Command 정렬 우선순위 (낮을수록 상위) <br />
+"relativeTo" : `String` -> Command 상대적 정렬을 위한 기준 Command ID <br />
+"showGroupSelected" : `Boolean` -> GroupCommand 플래그 <br />
+"cellDisplay" : `Object` -> {<br />
+&ensp;&ensp;"hover" : `Boolean` -> Cell에서 마우스 호버링시 동작여부<br />
+&ensp;&ensp;"position" : `String` -> Cell에서 동작시 버튼 위치<br />
+&ensp;&ensp;"selected" : `Boolean` -> Cell에서 선택했을때 동작 여부<br />}
+</details>
+    
+예제
+    
+```json
+"commandPlacements": {
+    "Awp0CreateCommandRightWall": {
+        "id": "Awp0CreateCommand",
+        "uiAnchor": "aw_rightWall",
+        "priority": 20,
+        "parentGroupId": "Awp0NewGroup"
+    },
+    "Awp0saveasCommandRightWall": {
+        "id": "Awp0SaveAsCommand",
+        "uiAnchor": "aw_rightWall",
+        "priority": 20,
+        "parentGroupId": "Awp0NewGroup"
+    }
+}
+```
+    
 </details>
 }
